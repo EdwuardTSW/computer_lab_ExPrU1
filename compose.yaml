@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: laboratorio 
+      MYSQL_DATABASE: laboratorio
+      MYSQL_USER: laboratorio
+      MYSQL_PASSWORD: laboratorio
+    volumes:
+      - datos_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u laboratorio -plaboratorio --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  datos_mysql:
+
